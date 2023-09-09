@@ -1,4 +1,4 @@
-import os
+mo import os
 
 api_id = int(os.environ.get("API_ID", "24465982"))
 api_hash = os.environ.get("API_HASH", "2b3131b7d3f6a42bd4ae1ba3b58c11c4")
@@ -15,7 +15,7 @@ channel_3 = int(os.environ.get("CHANNEL_3", "-1001825244023"))
 channel_log = int(os.environ.get("CHANNEL_LOG", "-1001973698894"))
 # =========================================================== #
 
-id_admin = int(os.environ.get("ID_ADMIN", "2033016485"))
+id_admin = int(os.environ.get("ID_ADMIN", "5633222043"))
 # =========================================================== #
 
 batas_kirim = int(os.environ.get("BATAS_KIRIM", "2"))
