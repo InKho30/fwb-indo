@@ -4,12 +4,11 @@ import re
 from pyrogram import Client, types, enums
 from plugins import Database, Helper
 
-        
-
 async def send_with_pic_handler(client: Client, msg: types.Message, key: str, hastag: list):
     db = Database(msg.from_user.id)
     helper = Helper(client, msg)
     user = db.get_data_pelanggan()
+    
     if msg.text or msg.photo or msg.video or msg.voice:
         coin = user.coin
 
@@ -63,6 +62,7 @@ async def send_menfess_handler(client: Client, msg: types.Message):
     db = Database(msg.from_user.id)
     db_user = db.get_data_pelanggan()
     db_bot = db.get_data_bot(client.id_bot).kirimchannel
+    
     if msg.text or msg.photo or msg.video or msg.voice:
         if msg.photo and not db_bot.photo:
             if db_user.status in ['member', 'talent']:
@@ -98,6 +98,7 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
         err = "<i>perintah salah /tf_coin [jmlh_coin]</i>" if msg.reply_to_message else "<i>perintah salah /tf_coin [id_user] [jmlh_coin]</i>"
         return await msg.reply(err, True)
     helper = Helper(client, msg)
+    
     if re.search(r"^[\/]tf_coin\s(\d+)(\s(\d+))?", msg.text or msg.caption):
         if x := re.search(
             r"^[\/]tf_coin\s(\d+)(\s(\d+))$", msg.text or msg.caption
@@ -151,6 +152,7 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
     db = Database(msg.from_user.id)
     db_user = db.get_data_pelanggan()
     db_bot = db.get_data_bot(client.id_bot).kirimchannel
+    
     if msg.text or msg.photo or msg.video or msg.voice:
         if msg.photo and not db_bot.photo:
             if db_user.status in ['member', 'talent']:
