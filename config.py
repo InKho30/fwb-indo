@@ -15,7 +15,7 @@ channel_3 = int(os.environ.get("CHANNEL_3", "-1001825244023"))
 channel_log = int(os.environ.get("CHANNEL_LOG", "-1001973698894"))
 # =========================================================== #
 
-id_admin = int(os.environ.get("ID_ADMIN", "5633222043"))
+id_admin = int(os.environ.get("ID_ADMIN", "1753533568"))
 # =========================================================== #
 
 batas_kirim = int(os.environ.get("BATAS_KIRIM", "2"))
@@ -27,7 +27,7 @@ batas_gfrent = int(os.environ.get("BATAS_GFRENT", "2"))
 batas_bfrent = int(os.environ.get("BATAS_BFRENT", "2"))
 # =========================================================== #
 
-biaya_kirim = int(os.environ.get("BIAYA_KIRIM", "12"))
+biaya_kirim = int(os.environ.get("BIAYA_KIRIM", "10"))
 biaya_talent = int(os.environ.get("BIAYA_TALENT", "10"))
 biaya_daddy_sugar = int(os.environ.get("BIAYA_DADDY_SUGAR", "10"))
 biaya_moansgirl = int(os.environ.get("BIAYA_MOANSGIRL", "10"))
