@@ -1,6 +1,5 @@
 import config
 import re
-
 from pyrogram import Client, types, enums
 from plugins import Database, Helper
 
@@ -15,7 +14,7 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
         if coin >= config.biaya_kirim:
             coin = user.coin - config.biaya_kirim
         else:
-            return await msg.reply(f'🙅🏻‍♀️ Post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak.', quote=True)
+            return await msg.reply(f'🙅🏻‍♀️ Post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)  # Menambahkan keterangan kepada pengguna yang tidak memiliki cukup koin
 
         if key == hastag[0]:
             picture = config.pic_girl
@@ -55,7 +54,7 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
         await db.update_coin(coin)  # Perbarui jumlah koin di database
         await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
     else:
-        await msg.reply('media yang didukung photo, video dan voice')
+        await msg.reply('media yang didukung photo, video, dan voice')
 
 async def send_menfess_handler(client: Client, msg: types.Message):
     helper = Helper(client, msg)
@@ -79,7 +78,7 @@ async def send_menfess_handler(client: Client, msg: types.Message):
         if coin >= config.biaya_kirim:
             coin = db_user.coin - config.biaya_kirim
         else:
-            return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak.', quote=True)
+            return await msg.reply(f'🙅🏻‍♀️ Post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)  # Menambahkan keterangan kepada pengguna yang tidak memiliki cukup koin
 
         link = await get_link()
         kirim = await client.copy_message(config.channel_1, msg.from_user.id, msg.id)
@@ -87,7 +86,7 @@ async def send_menfess_handler(client: Client, msg: types.Message):
         await db.update_coin(coin)  # Perbarui jumlah koin di database
         await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
     else:
-        await msg.reply('media yang didukung photo, video dan voice')
+        await msg.reply('media yang didukung photo, video, dan voice')
 
 async def get_link():
     anu = str(config.channel_1).split('-100')[1]
@@ -169,4 +168,16 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
         if coin >= config.biaya_kirim:
             coin = db_user.coin - config.biaya_kirim
         else:
-            return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak.', quote=True)
+            return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)  # Menambahkan keterangan kepada pengguna yang tidak memiliki cukup koin
+
+        link = await get_link()
+        kirim = await client.copy_message(config.channel_1, msg.from_user.id, msg.id)
+        await helper.send_to_channel_log(type="log_channel", link=link + str(kirim.id))
+        await db.update_coin(coin)  # Perbarui jumlah koin di database
+        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
+    else:
+        await msg.reply('media yang didukung photo, video, dan voice')
+
+async def get_link():
+    anu = str(config.channel_1).split('-100')[1]
+    return f"https://t.me/c/{anu}/"
