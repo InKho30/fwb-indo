@@ -1,4 +1,4 @@
-mo import os
+import os
 
 api_id = int(os.environ.get("API_ID", "24465982"))
 api_hash = os.environ.get("API_HASH", "2b3131b7d3f6a42bd4ae1ba3b58c11c4")
