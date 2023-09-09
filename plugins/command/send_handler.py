@@ -52,9 +52,9 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
         kirim = await client.send_photo(config.channel_1, picture, caption, caption_entities=entities)
         await helper.send_to_channel_log(type="log_channel", link=link + str(kirim.id))
         await db.update_coin(coin)  # Perbarui jumlah koin di database
-        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin} \n\nwaktu reset setiap jam 1 pagi\n<a href='{link + str(kirim.id)}'>check pesan kamu</a>.")
+        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
     else:
-        await msg.reply('media yang didukung photo, video, dan voice')
+        await msg.reply('media yang didukung photo, video dan voice')
 
 async def send_menfess_handler(client: Client, msg: types.Message):
     helper = Helper(client, msg)
@@ -63,16 +63,6 @@ async def send_menfess_handler(client: Client, msg: types.Message):
     db_bot = db.get_data_bot(client.id_bot).kirimchannel
     
     if msg.text or msg.photo or msg.video or msg.voice:
-        if msg.photo and not db_bot.photo:
-            if db_user.status in ['member', 'talent']:
-                return await msg.reply('Tidak bisa mengirim photo, karena sedang dinonaktifkan oleh admin', True)
-        elif msg.video and not db_bot.video:
-            if db_user.status in ['member', 'talent']:
-                return await msg.reply('Tidak bisa mengirim video, karena sedang dinonaktifkan oleh admin', True)
-        elif msg.voice and not db_bot.voice:
-            if db_user.status in ['member', 'talent']:
-                return await msg.reply('Tidak bisa mengirim voice, karena sedang dinonaktifkan oleh admin', True)
-
         coin = db_user.coin
 
         if coin >= config.biaya_kirim:
@@ -86,7 +76,7 @@ async def send_menfess_handler(client: Client, msg: types.Message):
         await db.update_coin(coin)  # Perbarui jumlah koin di database
         await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
     else:
-        await msg.reply('media yang didukung photo, video, dan voice')
+        await msg.reply('media yang didukung photo, video dan voice')
 
 async def get_link():
     anu = str(config.channel_1).split('-100')[1]
@@ -168,16 +158,4 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
         if coin >= config.biaya_kirim:
             coin = db_user.coin - config.biaya_kirim
         else:
-            return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)  # Menambahkan keterangan kepada pengguna yang tidak memiliki cukup koin
-
-        link = await get_link()
-        kirim = await client.copy_message(config.channel_1, msg.from_user.id, msg.id)
-        await helper.send_to_channel_log(type="log_channel", link=link + str(kirim.id))
-        await db.update_coin(coin)  # Perbarui jumlah koin di database
-        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
-    else:
-        await msg.reply('media yang didukung photo, video, dan voice')
-
-async def get_link():
-    anu = str(config.channel_1).split('-100')[1]
-    return f"https://t.me/c/{anu}/"
+            return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)
