@@ -77,6 +77,15 @@ class Database():
                 "coin": f"{diterima}_{id_target}"
             }}
         )
+
+    async def update_coin(self, coin: int):
+        user = self.get_data_pelanggan()
+        last_coin = user.coin
+        new_coin = last_coin - coin  # Kurangi jumlah koin sesuai dengan biaya kirim
+        mycol.update_one(
+            {"_id": self.user_id},
+            {"$set": {"coin": f"{new_coin}_{self.user_id}"}}
+        )
     async def update_admin(self, id_admin: int, id_bot: int):
         last_data = {
             "admin": self.get_data_bot(id_bot).admin
