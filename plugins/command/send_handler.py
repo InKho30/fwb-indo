@@ -52,7 +52,7 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
         kirim = await client.send_photo(config.channel_1, picture, caption, caption_entities=entities)
         await helper.send_to_channel_log(type="log_channel", link=link + str(kirim.id))
         await db.update_coin(coin)  # Perbarui jumlah koin di database
-        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
+        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin} \n\nwaktu reset setiap jam 1 pagi\n<a href='{link + str(kirim.id)}'>check pesan kamu</a>.")
     else:
         await msg.reply('media yang didukung photo, video, dan voice')
 
