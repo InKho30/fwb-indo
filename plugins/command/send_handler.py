@@ -1,28 +1,41 @@
+
 import config
 import re
+
 from pyrogram import Client, types, enums
 from plugins import Database, Helper
+
+        
 
 async def send_with_pic_handler(client: Client, msg: types.Message, key: str, hastag: list):
     db = Database(msg.from_user.id)
     helper = Helper(client, msg)
     user = db.get_data_pelanggan()
-    
     if msg.text or msg.photo or msg.video or msg.voice:
+        menfess = user.menfess
+        all_menfess = user.all_menfess
         coin = user.coin
-
-        if coin >= config.biaya_kirim:
-            coin = user.coin - config.biaya_kirim
-        else:
-            return await msg.reply(f'🙅🏻‍♀️ Post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)  # Menambahkan keterangan kepada pengguna yang tidak memiliki cukup koin
+        if menfess >= config.batas_kirim and user.status in [
+            'member',
+            'talent',
+        ]:
+            if coin >= config.biaya_kirim:
+                coin = user.coin - config.biaya_kirim
+            else:
+                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @bobbyngeped', quote=True)
 
         if key == hastag[0]:
             picture = config.pic_girl
         elif key == hastag[1]:
             picture = config.pic_boy
+            
         if user.status == 'talent':
             picture = config.pic_talentgirl
-
+        if user.status == 'admin':
+            if key == hastag[0]:
+                picture = config.pic_admingirl
+            elif key == hastag[1]:
+                picture = config.pic_adminboy
         if user.status == 'daddy sugar':
             picture = config.pic_daddysugar
         if user.status == 'boyfriend rent':
@@ -30,15 +43,23 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
         if user.status == 'girlfriend rent':
             picture = config.pic_gfrent
         if user.status == 'moans boy':
-            if key == hastag[1]:
+              if key == hastag[1]:
                 picture = config.pic_moansboy
-            elif key == hastag[0]:
+              elif key == hastag[0]:
                 picture = config.pic_moansgirl
         elif user.status == 'moans girl':
-            if key == hastag[1]:
+              if key == hastag[1]:
                 picture = config.pic_moansboy
-            elif key == hastag[0]:
+              elif key == hastag[0]:
                 picture = config.pic_moansgirl
+
+            
+            
+
+
+
+
+            
 
         link = await get_link()
         caption = msg.text or msg.caption
@@ -46,8 +67,8 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
 
         kirim = await client.send_photo(config.channel_1, picture, caption, caption_entities=entities)
         await helper.send_to_channel_log(type="log_channel", link=link + str(kirim.id))
-        await db.update_coin(coin)  # Perbarui jumlah koin di database
-        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
+        await db.update_menfess(coin, menfess, all_menfess)
+        await msg.reply(f"pesan telah berhasil terkirim. hari ini kamu telah mengirim menfess sebanyak {menfess + 1}/{config.batas_kirim} . kamu dapat mengirim menfess sebanyak {config.batas_kirim} kali dalam sehari\n\nwaktu reset setiap jam 1 pagi\n<a href='{link + str(kirim.id)}'>check pesan kamu</a>. \n\n\n\n Info: Topup Coin Hanya ke @bobbyngeped")
     else:
         await msg.reply('media yang didukung photo, video dan voice')
 
@@ -56,20 +77,34 @@ async def send_menfess_handler(client: Client, msg: types.Message):
     db = Database(msg.from_user.id)
     db_user = db.get_data_pelanggan()
     db_bot = db.get_data_bot(client.id_bot).kirimchannel
-    
     if msg.text or msg.photo or msg.video or msg.voice:
-        coin = db_user.coin
+        if msg.photo and not db_bot.photo:
+            if db_user.status in ['member', 'talent']:
+                return await msg.reply('Tidak bisa mengirim photo, karena sedang dinonaktifkan oleh admin', True)
+        elif msg.video and not db_bot.video:
+            if db_user.status in ['member', 'talent']:
+                return await msg.reply('Tidak bisa mengirim video, karena sedang dinonaktifkan oleh admin', True)
+        elif msg.voice and not db_bot.voice:
+            if db_user.status in ['member', 'talent']:
+                return await msg.reply('Tidak bisa mengirim voice, karena sedang dinonaktifkan oleh admin', True)
 
-        if coin >= config.biaya_kirim:
-            coin = db_user.coin - config.biaya_kirim
-        else:
-            return await msg.reply(f'🙅🏻‍♀️ Post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)  # Menambahkan keterangan kepada pengguna yang tidak memiliki cukup koin
+        menfess = db_user.menfess
+        all_menfess = db_user.all_menfess
+        coin = db_user.coin
+        if menfess >= config.batas_kirim and db_user.status in [
+            'member',
+            'talent',
+        ]:
+            if coin >= config.biaya_kirim:
+                coin = db_user.coin - config.biaya_kirim
+            else:
+                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @bobbyngeped', quote=True)
 
         link = await get_link()
         kirim = await client.copy_message(config.channel_1, msg.from_user.id, msg.id)
         await helper.send_to_channel_log(type="log_channel", link=link + str(kirim.id))
-        await db.update_coin(coin)  # Perbarui jumlah koin di database
-        await msg.reply(f"pesan telah berhasil terkirim. Koin Anda sekarang {coin}.")
+        await db.update_menfess(coin, menfess, all_menfess)
+        await msg.reply(f"pesan telah berhasil terkirim. hari ini kamu telah mengirim menfess sebanyak {menfess + 1}/{config.batas_kirim} . kamu dapat mengirim menfess sebanyak {config.batas_kirim} kali dalam sehari\n\nwaktu reset setiap jam 1 pagi\n<a href='{link + str(kirim.id)}'>check pesan kamu</a>")
     else:
         await msg.reply('media yang didukung photo, video dan voice')
 
@@ -82,7 +117,6 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
         err = "<i>perintah salah /tf_coin [jmlh_coin]</i>" if msg.reply_to_message else "<i>perintah salah /tf_coin [id_user] [jmlh_coin]</i>"
         return await msg.reply(err, True)
     helper = Helper(client, msg)
-    
     if re.search(r"^[\/]tf_coin\s(\d+)(\s(\d+))?", msg.text or msg.caption):
         if x := re.search(
             r"^[\/]tf_coin\s(\d+)(\s(\d+))$", msg.text or msg.caption
@@ -136,7 +170,6 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
     db = Database(msg.from_user.id)
     db_user = db.get_data_pelanggan()
     db_bot = db.get_data_bot(client.id_bot).kirimchannel
-    
     if msg.text or msg.photo or msg.video or msg.voice:
         if msg.photo and not db_bot.photo:
             if db_user.status in ['member', 'talent']:
@@ -148,9 +181,14 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
             if db_user.status in ['member', 'talent']:
                 return await msg.reply('Tidak bisa mengirim voice, karena sedang dinonaktifkan oleh admin', True)
 
+        menfess = db_user.menfess
+        all_menfess = db_user.all_menfess
         coin = db_user.coin
-
-        if coin >= config.biaya_kirim:
-            coin = db_user.coin - config.biaya_kirim
-        else:
-            return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. Koin Anda tidak mencukupi untuk mengirim pesan. Anda dapat membeli koin lebih banyak atau menghubungi @sugarbobby untuk membeli koin tambahan.', quote=True)
+        if menfess >= config.batas_kirim and db_user.status in [
+            'member',
+            'talent',
+        ]:
+            if coin >= config.biaya_kirim:
+                coin = db_user.coin - config.biaya_kirim
+            else:
+                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @bobbyngeped', quote=True
