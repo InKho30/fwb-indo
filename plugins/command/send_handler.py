@@ -24,7 +24,7 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
             if coin >= config.biaya_kirim:
                 coin = user.coin - config.biaya_kirim
             else:
-                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @cs4dminbot', quote=True)
+                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @sugarbobby', quote=True)
 
         if key == hastag[0]:
             picture = config.pic_girl
@@ -50,7 +50,7 @@ async def send_with_pic_handler(client: Client, msg: types.Message, key: str, ha
         kirim = await client.send_photo(config.channel_1, picture, caption, caption_entities=entities)
         await helper.send_to_channel_log(type="log_channel", link=link + str(kirim.id))
         await db.update_menfess(coin, menfess, all_menfess)
-        await msg.reply(f"pesan telah berhasil terkirim. hari ini kamu telah mengirim menfess sebanyak {menfess + 1}/{config.batas_kirim} . kamu dapat mengirim menfess sebanyak {config.batas_kirim} kali dalam sehari\n\nwaktu reset setiap jam 1 pagi\n<a href='{link + str(kirim.id)}'>check pesan kamu</a>. \n\n\n\n Info: Topup Coin Hanya ke @cs4dminbot")
+        await msg.reply(f"pesan telah berhasil terkirim. hari ini kamu telah mengirim menfess sebanyak {menfess + 1}/{config.batas_kirim} . kamu dapat mengirim menfess sebanyak {config.batas_kirim} kali dalam sehari\n\nwaktu reset setiap jam 1 pagi\n<a href='{link + str(kirim.id)}'>check pesan kamu</a>. \n\n\n\n Info: Topup Coin Hanya ke @sugarbobby")
     else:
         await msg.reply('media yang didukung photo, video dan voice')
 
@@ -80,7 +80,7 @@ async def send_menfess_handler(client: Client, msg: types.Message):
             if coin >= config.biaya_kirim:
                 coin = db_user.coin - config.biaya_kirim
             else:
-                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @cs4dminbot', quote=True)
+                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @sugarbobby', quote=True)
 
         link = await get_link()
         kirim = await client.copy_message(config.channel_1, msg.from_user.id, msg.id)
@@ -172,4 +172,4 @@ async def transfer_coin_handler(client: Client, msg: types.Message):
             if coin >= config.biaya_kirim:
                 coin = db_user.coin - config.biaya_kirim
             else:
-                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @cs4dminbot', quote=True)
+                return await msg.reply(f'🙅🏻‍♀️ post gagal terkirim. kamu hari ini telah mengirim ke menfess sebanyak {menfess}/{config.batas_kirim} kali.serta coin mu kurang untuk mengirim menfess diluar batas harian., kamu dapat mengirim menfess kembali pada hari esok.\n\n waktu reset jam 1 pagi. \n\n\n\n Info: Topup Coin Hanya ke @sugarbobby', quote=True)
